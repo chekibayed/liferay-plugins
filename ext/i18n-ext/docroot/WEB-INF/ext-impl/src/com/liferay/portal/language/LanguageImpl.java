@@ -654,20 +654,16 @@ public class LanguageImpl implements Language {
 		}
 		
 // Changed for I18n Plugin
-//        HttpServletRequest request = PortalUtil.getHttpServletRequest((PortletRequest) pageContext.getRequest());
-		try {
-			if(pageContext != null) {
-				@SuppressWarnings("unchecked")
-		        Map<String, String> translations = (Map<String, String>) pageContext.getRequest().getAttribute(I18N_HELPER);
-		        if(translations == null) {
-		                translations = new ConcurrentHashMap<String, String>();
-		                pageContext.getRequest().setAttribute(I18N_HELPER, translations);
-		        }
-		        translations.put(key, value);
-			}
-		} catch (Exception ignore) {
-			ignore.printStackTrace();
+		if(pageContext != null) {
+			@SuppressWarnings("unchecked")
+	        Map<String, String> translations = (Map<String, String>) pageContext.getRequest().getAttribute(I18N_HELPER);
+	        if(translations == null) {
+	                translations = new ConcurrentHashMap<String, String>();
+	                pageContext.getRequest().setAttribute(I18N_HELPER, translations);
+	        }
+	        translations.put(key, value);
 		}
+
 // End of change for I18n Plugin
 		return value;
 	}
