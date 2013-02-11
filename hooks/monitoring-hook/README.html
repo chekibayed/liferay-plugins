@@ -1,0 +1,232 @@
+<html>
+<head>
+<title>Monitoring hook</title>
+<style>
+body {
+	background: url(http://www.olafkock.de/olaf-half.png) no-repeat top
+		right;
+}
+</style>
+</head>
+<body>
+	<h1>Monitoring hook usage information</h1>
+	<p>This hook displays Liferay's basic monitoring information at the
+		bottom of every page (if you configure Liferay to display this
+		information).</p>
+	<p>By default Liferay would embed information similar to this as an
+		HTML comment at the end of each page - this is nice for environments
+		where you don't want to see this, but might be hard to use in test
+		environments (where you want to see the information during your tests)
+	</p>
+	<p>The output looks like this:</p>
+	<table border="1">
+		<thead>
+			<tr>
+				<td>Name</td>
+				<td>Namespace</td>
+				<td>Description</td>
+				<td>Duration</td>
+				<td>User</td>
+				<td>Status</td>
+				<td>URL/DisplayName</td>
+				<td>Timeout/Portlet Id</td>
+				<td>Attributes</td>
+				<td>Type</td>
+			</tr>
+		</thead>
+		<tr>
+			<td>103</td>
+			<td><span title="com.liferay.monitoring.Portlet"><i>c.l.m.Portlet</i></span></td>
+			<td>null</td>
+			<td align="right">0</td>
+			<td>null</td>
+			<td>SUCCESS</td>
+			<td>Tags Compiler</td>
+			<td>103</td>
+			<td>&nbsp;</td>
+			<td>RENDER</td>
+		</tr>
+		<tr>
+			<td>56</td>
+			<td><span title="com.liferay.monitoring.Portlet"><i>c.l.m.Portlet</i></span></td>
+			<td>null</td>
+			<td align="right">36</td>
+			<td>null</td>
+			<td>SUCCESS</td>
+			<td>Journal Content</td>
+			<td>56_INSTANCE_JaLJR3MQtAYm</td>
+			<td>&nbsp;</td>
+			<td>RENDER</td>
+		</tr>
+		<tr>
+			<td>101</td>
+			<td><span title="com.liferay.monitoring.Portlet"><i>c.l.m.Portlet</i></span></td>
+			<td>null</td>
+			<td align="right">130</td>
+			<td>null</td>
+			<td>SUCCESS</td>
+			<td>Asset Publisher</td>
+			<td>101_INSTANCE_0BVmhEtIm8dR</td>
+			<td>&nbsp;</td>
+			<td>RENDER</td>
+		</tr>
+		<tr>
+			<td><span title="/html/common/themes/portal.jsp"><i>/h/c/t/portal.jsp</i></span></td>
+			<td><span title="com.liferay.monitoring.Portal"><i>c.l.m.Portal</i></span></td>
+			<td>Portal Request</td>
+			<td align="right">629</td>
+			<td>null</td>
+			<td>SUCCESS</td>
+			<td><span
+				title="http://localhost:8080/html/common/themes/portal.jsp.jsp_display"><i>.../portal.jsp.jsp_display</i></span></td>
+			<td>-1</td>
+			<td></td>
+		</tr>
+	</table>
+	<p>(Note: There are some abbreviations to shorten the display -
+		hover your mouse over them to see them in detail)</p>
+	<p>
+		Not much work has been done to make this beautiful or functionally
+		advanced - this is just the basic information that's available with
+		the following configuration (changes to default in <strong>bold</strong>)
+		in your portal-ext.properties:
+	</p>
+	<pre>##
+## Spring
+##
+
+    #
+    # Input a list of comma delimited Spring configurations. These will be
+    # loaded after the bean definitions specified in the contextConfigLocation
+    # parameter in web.xml.
+    #
+    # Note that there is a special case for hibernate-spring.xml and
+    # jpa-spring.xml. Even though both files are specified, only one will
+    # actually load at runtime based on the property "persistence.provider".
+    #
+    spring.configs=\
+        META-INF/base-spring.xml,\
+        \
+        META-INF/hibernate-spring.xml,\
+        META-INF/infrastructure-spring.xml,\
+        META-INF/management-spring.xml,\
+        \
+        META-INF/util-spring.xml,\
+        \
+        META-INF/jpa-spring.xml,\
+        \
+        META-INF/executor-spring.xml,\
+        \
+        META-INF/audit-spring.xml,\
+        META-INF/cluster-spring.xml,\
+        META-INF/editor-spring.xml,\
+        META-INF/jcr-spring.xml,\
+        META-INF/ldap-spring.xml,\
+        META-INF/messaging-core-spring.xml,\
+        META-INF/messaging-misc-spring.xml,\
+        META-INF/mobile-device-spring.xml,\
+        META-INF/notifications-spring.xml,\
+        META-INF/poller-spring.xml,\
+        META-INF/rules-spring.xml,\
+        META-INF/scheduler-spring.xml,\
+        META-INF/scripting-spring.xml,\
+        META-INF/search-spring.xml,\
+        META-INF/workflow-spring.xml,\
+        \
+        META-INF/counter-spring.xml,\
+        META-INF/mail-spring.xml,\
+        META-INF/portal-spring.xml,\
+        META-INF/portlet-container-spring.xml,\
+        META-INF/staging-spring.xml,\
+        META-INF/virtual-layouts-spring.xml,\
+         \
+        #META-INF/dynamic-data-source-spring.xml,\
+        #META-INF/shard-data-source-spring.xml,\
+        #META-INF/memcached-spring.xml,\
+        <strong>META-INF/monitoring-spring.xml,</strong>\
+        \
+        META-INF/ext-spring.xml
+
+##
+## Monitoring
+##
+
+    #
+    # Configure the appropriate level for monitoring Liferay.
+    # Valid values are: HIGH, LOW, MEDIUM, OFF.
+    #
+    monitoring.level.com.liferay.monitoring.Portal=HIGH
+    monitoring.level.com.liferay.monitoring.Portlet=HIGH
+
+    #
+    # Set this to true to store data samples of the current request as a thread
+    # local variable. This allows you to obtain each request's statistics for
+    # further processing
+    #
+    monitoring.data.sample.thread.local=<strong>true</strong>
+
+    #
+    # Set this to true to monitor portal requests.
+    #
+    monitoring.portal.request=<strong>true</strong>
+
+    #
+    # Set this to true to monitor portlet action requests.
+    #
+    monitoring.portlet.action.request=<strong>true</strong>
+
+    #
+    # Set this to true to monitor portlet event requests.
+    #
+    monitoring.portlet.event.request=<strong>true</strong>
+
+    #
+    # Set this to true to monitor portlet render requests.
+    #
+    monitoring.portlet.render.request=<strong>true</strong>
+ 
+    #
+    # Set this to true to monitor portlet resource requests.
+    #
+    monitoring.portlet.resource.request=<strong>true</strong>
+
+    #
+    # Set this to true to show data samples at the bottom of each portal page.
+    # In order for data to show, the property
+    # "monitoring.data.sample.thread.local" must be set to true.
+    #
+    monitoring.show.per.request.data.sample=<strong>true</strong>
+	</pre>
+	<p>As always, when you change your portal-ext.properties in
+		Liferay, remember that you need to restart your server.</p>
+	<h2>Extension ideas</h2>
+	<ul>
+		<li>enhance with interactivity - e.g. hover a line to highlight
+			the related portlet (for portlet requests)</li>
+		<li>introduce permissions or interactive configuration for
+			displaying this information</li>
+		<li>add more markup to make the content easily machine-parsable,
+			e.g. for automated performance tests</li>
+	</ul>
+	<h2>
+		History & Feedback<img
+			src="https://www.liferay.com/image/image_gallery?uuid=cd061513-b606-40ca-b85e-655d6c920a8e&groupId=1339770&t=1324028422499"
+			align="right" style="margin-left: 10px" />
+	</h2>
+	<p>
+		The idea for this plugin came when I prepared my "<a
+			href="https://www.liferay.com/web/olaf.kock/blog/-/blogs/radio-liferay-episode-23-olaf-kock-well-hidden-features">Well
+			Hidden Features of Liferay</a>" presentation that you can listen to on <a
+			href="https://www.liferay.com/radio">Radio Liferay</a>. As you can
+		see there, the actual appearance of the HTML comments that Liferay
+		embeds by default is quite hard to read, but in some cases the
+		information will be quite useful.
+	</p>
+	<p>
+		Let me know what you think, either at the <a
+			href="https://www.liferay.com/web/olaf.kock/blog/-/blogs/displaying-portlet-monitoring-information">blogpost
+			introducing this plugin</a> or on twitter: <a
+			href="https://twitter.com/olafk">@olafk</a>
+	</p>
+</body>
+</html>
